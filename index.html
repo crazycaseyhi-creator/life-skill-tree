@@ -96,6 +96,17 @@
         // --- Visualization Engine (Vis-Network) ---
         function initNetwork() {
             const container = document.getElementById('mynetwork');
+            
+            // -------------------------------------------------------------
+            // THE ANCHOR SYSTEM: Lock the three planets in a center triangle
+            // -------------------------------------------------------------
+            const R = 180; // Distance from the dead center
+            treeData.nodes.forEach(node => {
+                if (node.id === 'Mind') { node.x = 0; node.y = -R; node.fixed = true; }
+                if (node.id === 'Body') { node.x = R * 0.866; node.y = R * 0.5; node.fixed = true; } // Bottom Right
+                if (node.id === 'Soul') { node.x = -R * 0.866; node.y = R * 0.5; node.fixed = true; } // Bottom Left
+            });
+
             const data = {
                 nodes: new vis.DataSet(treeData.nodes),
                 edges: new vis.DataSet(treeData.edges)
@@ -112,7 +123,7 @@
                 edges: {
                     width: 2,
                     color: { color: '#334155', highlight: '#6366f1' },
-                    smooth: { type: 'continuous' }
+                    smooth: { type: 'continuous' } // Keeps lines curved so they weave nicely
                 },
                 groups: {
                     planet: { size: 35, color: { background: '#0f172a', border: '#818cf8', highlight: '#6366f1' }, font: { size: 18, color: '#818cf8' } },
@@ -121,7 +132,8 @@
                     bridge: { color: { background: '#1e1b4b', border: '#a855f7' } }
                 },
                 physics: {
-                    forceAtlas2Based: { gravitationalConstant: -50, centralGravity: 0.01, springLength: 150, springConstant: 0.08 },
+                    // Adjusted physics so nodes push away from the center but stay connected
+                    forceAtlas2Based: { gravitationalConstant: -80, centralGravity: 0.005, springLength: 200, springConstant: 0.05 },
                     maxVelocity: 50,
                     solver: 'forceAtlas2Based',
                     timestep: 0.35,
