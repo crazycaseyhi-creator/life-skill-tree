@@ -7,21 +7,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+        mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+        window.showQuest = (nodeId) => {
+            const quests = {
+                'Compendium': {
+                    title: "Psychological Compendium",
+                    steps: ["Finalize the 8-page master layout template", "Create vector art for the 'Wim Hof' node", "Draft the 'Field Log' section for Buteyko", "Audit the 'Silva Method' content for practical steps"],
+                    evolution: "Unlocks: 'Cognitive Architecture' branch"
+                },
+                'WimHof': {
+                    title: "Wim Hof Method",
+                    steps: ["Complete 10-day cold shower streak", "Document 'Retaining' times in Field Log", "Master the 'Guided Power' breathing session", "Integrate with morning mobility routine"],
+                    evolution: "Unlocks: 'Autonomic Mastery' branch"
+                },
+                'LST': {
+                    title: "Life Skill Tree Project",
+                    steps: ["Deploy GitHub Pages (Done)", "Add Quest Modal Interactivity", "Integrate LocalStorage for saving notes", "Create 'Withered' logic based on dates"],
+                    evolution: "Unlocks: 'Digital Architect' branch"
+                }
+            };
+            const data = quests[nodeId] || { title: "New Seed", steps: ["Define Objective", "Gather Resources", "First Action", "Review Results"], evolution: "Growth Pending..." };
+            document.getElementById('modalTitle').innerText = data.title;
+            document.getElementById('questList').innerHTML = data.steps.map(s => `<li class='mb-2'>▹ ${s}</li>`).join('');
+            document.getElementById('evolutionText').innerText = data.evolution;
+            document.getElementById('questModal').classList.remove('hidden');
+        }
     </script>
     <style>
-        /* Withered Node Styling - Desaturated and Droopy */
-        .withered rect { fill: #3e2723 !important; stroke: #5d4037 !important; filter: grayscale(80%); }
-        .withered text { fill: #8d6e63 !important; font-style: italic; }
-        
-        /* Active Node Styling - Vibrant Green */
-        .active rect { fill: #065f46 !important; stroke: #34d399 !important; }
-        .active text { fill: #ffffff !important; font-weight: bold; }
-
-        /* Mastered Node Styling - Golden Glow */
-        .mastered rect { fill: #854d0e !important; stroke: #fde047 !important; }
-        .mastered text { fill: #fefce8 !important; }
-        
+        .withered rect { fill: #3e2723 !important; stroke: #5d4037 !important; filter: grayscale(80%); cursor: pointer; }
+        .active rect { fill: #065f46 !important; stroke: #34d399 !important; cursor: pointer; }
+        .mastered rect { fill: #854d0e !important; stroke: #fde047 !important; cursor: pointer; }
         body { background-color: #0f172a; }
     </style>
 </head>
@@ -29,40 +44,45 @@
 
     <header class="mb-10 text-center">
         <h1 class="text-4xl font-bold text-emerald-400 uppercase tracking-widest">Life Skill Tree</h1>
-        <p class="text-slate-400">Current Objective: Cultivate the Arcanum & The Forge</p>
+        <p class="text-slate-400">Click a node to view the Quest Line.</p>
     </header>
 
-    <main class="max-w-5xl mx-auto bg-slate-800/50 p-8 rounded-2xl shadow-2xl border border-slate-700">
+    <main class="max-w-5xl mx-auto bg-slate-800/50 p-8 rounded-2xl shadow-2xl border border-slate-700 relative">
         <div class="mermaid flex justify-center">
             graph TD
-                %% Core
                 Me((Casey)) --> Mind[The Arcanum]
                 Me --> Body[The Forge]
                 Me --> Craft[The Craft]
 
-                %% Mind Branch
                 Mind --> Compendium[Psychological Compendium]
                 Mind --> Masters[Masters Application]
                 
-                %% Body Branch
                 Body --> Breathwork[Breathing Techniques]
                 Breathwork --> WimHof[Wim Hof Method]
                 
-                %% Craft Branch
                 Craft --> LST[Life Skill Tree Project]
                 Craft --> Farm[Farm Management]
 
-                %% Status Assignments
+                click Compendium call showQuest("Compendium")
+                click WimHof call showQuest("WimHof")
+                click LST call showQuest("LST")
+
                 class Compendium,Masters,WimHof,Farm withered;
                 class LST active;
                 class Mind,Body,Craft mastered;
         </div>
     </main>
 
-    <div class="max-w-xl mx-auto mt-12 grid grid-cols-3 gap-4 text-center text-xs uppercase tracking-tighter">
-        <div class="p-2 border border-emerald-500 text-emerald-500">Active</div>
-        <div class="p-2 border border-yellow-500 text-yellow-500">Mastered</div>
-        <div class="p-2 border border-orange-900 text-orange-900">Withered</div>
+    <div id="questModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-emerald-500 p-6 rounded-xl max-w-md w-full shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+            <h2 id="modalTitle" class="text-2xl font-bold text-emerald-400 mb-4 uppercase tracking-wider"></h2>
+            <ul id="questList" class="text-slate-300 font-mono text-sm mb-6"></ul>
+            <div class="border-t border-slate-700 pt-4">
+                <p class="text-xs text-slate-500 uppercase mb-1">Natural Evolution:</p>
+                <p id="evolutionText" class="text-emerald-500 italic text-sm"></p>
+            </div>
+            <button onclick="document.getElementById('questModal').classList.add('hidden')" class="mt-6 w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded uppercase transition-colors">Close Log</button>
+        </div>
     </div>
 
 </body>
