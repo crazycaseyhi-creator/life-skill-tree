@@ -158,7 +158,7 @@
             }
         }
 
-        // 3. The Oracle (Gemini Call)
+        // 3. The Oracle (Gemini Call) - UPGRADED WITH ERROR TRACKING
         async function callGemini(apiKey, instruction, currentCode) {
             const systemPrompt = `You are an AI hooked directly into a website's source code. The user wants to modify their site. 
             Here is their instruction: "${instruction}". 
@@ -172,7 +172,18 @@
                     contents: [{ parts: [{ text: systemPrompt + "\n\nCURRENT CODE:\n" + currentCode }] }]
                 })
             });
+            
             const data = await response.json();
+            
+            // --- NEW ERROR HANDLING ---
+            if (data.error) {
+                throw new Error(`Google API said: ${data.error.message}`);
+            }
+            if (!data.candidates || data.candidates.length === 0) {
+                throw new Error("Google API returned an empty response. It might be overloaded.");
+            }
+            // --------------------------
+
             let newCode = data.candidates[0].content.parts[0].text;
             // Clean up if Gemini accidentally uses markdown
             newCode = newCode.replace(/^```html\n?/, '').replace(/\n?```$/, '');
