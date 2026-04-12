@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casey's Life Skill Tree</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+    <style>
+        /* Withered Node Styling - Desaturated and Droopy */
+        .withered rect { fill: #3e2723 !important; stroke: #5d4037 !important; filter: grayscale(80%); }
+        .withered text { fill: #8d6e63 !important; font-style: italic; }
+        
+        /* Active Node Styling - Vibrant Green */
+        .active rect { fill: #065f46 !important; stroke: #34d399 !important; }
+        .active text { fill: #ffffff !important; font-weight: bold; }
+
+        /* Mastered Node Styling - Golden Glow */
+        .mastered rect { fill: #854d0e !important; stroke: #fde047 !important; }
+        .mastered text { fill: #fefce8 !important; }
+        
+        body { background-color: #0f172a; }
+    </style>
+</head>
+<body class="text-slate-100 p-8">
+
+    <header class="mb-10 text-center">
+        <h1 class="text-4xl font-bold text-emerald-400 uppercase tracking-widest">Life Skill Tree</h1>
+        <p class="text-slate-400">Current Objective: Cultivate the Arcanum & The Forge</p>
+    </header>
+
+    <main class="max-w-5xl mx-auto bg-slate-800/50 p-8 rounded-2xl shadow-2xl border border-slate-700">
+        <div class="mermaid flex justify-center">
+            graph TD
+                %% Core
+                Me((Casey)) --> Mind[The Arcanum]
+                Me --> Body[The Forge]
+                Me --> Craft[The Craft]
+
+                %% Mind Branch
+                Mind --> Compendium[Psychological Compendium]
+                Mind --> Masters[Masters Application]
+                
+                %% Body Branch
+                Body --> Breathwork[Breathing Techniques]
+                Breathwork --> WimHof[Wim Hof Method]
+                
+                %% Craft Branch
+                Craft --> LST[Life Skill Tree Project]
+                Craft --> Farm[Farm Management]
+
+                %% Status Assignments
+                class Compendium,Masters,WimHof,Farm withered;
+                class LST active;
+                class Mind,Body,Craft mastered;
+        </div>
+    </main>
+
+    <div class="max-w-xl mx-auto mt-12 grid grid-cols-3 gap-4 text-center text-xs uppercase tracking-tighter">
+        <div class="p-2 border border-emerald-500 text-emerald-500">Active</div>
+        <div class="p-2 border border-yellow-500 text-yellow-500">Mastered</div>
+        <div class="p-2 border border-orange-900 text-orange-900">Withered</div>
+    </div>
+
+</body>
+</html>
