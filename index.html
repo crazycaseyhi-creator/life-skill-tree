@@ -276,7 +276,7 @@
             return newCode;
         }
 
-        async function pushToGitHub(token, repo, newContent, sha) {
+       async function pushToGitHub(token, repo, newContent, sha) {
             const url = `https://api.github.com/repos/${repo}/contents/index.html`;
             const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
             const contentEncoded = btoa(unescape(encodeURIComponent(newContent)));
@@ -286,7 +286,12 @@
                 headers: headers,
                 body: JSON.stringify({ message: "Self-Modification Update via API", content: contentEncoded, sha: sha })
             });
-            if (!putRes.ok) throw new Error("GitHub rejected the push.");
+            
+            // --- UPGRADED ERROR TRACKING ---
+            if (!putRes.ok) {
+                const errorData = await putRes.json();
+                throw new Error(`GitHub said: ${errorData.message}`);
+            }
         }
 
         function startDeploymentLoader() {
