@@ -94,14 +94,21 @@
             });
             network = new vis.Network(container, {nodes: new vis.DataSet(treeData.nodes), edges: new vis.DataSet(treeData.edges)}, {
                 nodes: { shape: 'dot', size: 20, font: { color: '#e2e8f0', size: 14 } },
-                edges: { width: 2, color: { color: '#334155' } },
+                edges: { width: 1, color: { opacity: 0 } }, // Made edges completely transparent
                 groups: {
                     planet: { size: 35, color: { background: '#0f172a', border: '#818cf8' } },
                     active: { color: { background: '#064e3b', border: '#10b981' } },
                     withered: { color: { background: '#291c1a', border: '#78350f' } },
                     bridge: { color: { background: '#1e1b4b', border: '#a855f7' } }
                 },
-                physics: { forceAtlas2Based: { gravitationalConstant: -80, springLength: 200 } }
+                physics: { 
+                    forceAtlas2Based: { 
+                        gravitationalConstant: -120, // Adjusted for slightly more repulsion between nodes
+                        springLength: 300,           // Adjusted for more space between connected nodes
+                        centralGravity: -0.1         // Negative central gravity to repel nodes from the center
+                    },
+                    solver: 'forceAtlas2Based' // Explicitly set solver
+                }
             });
         }
         initNetwork();
