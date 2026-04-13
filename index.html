@@ -187,7 +187,9 @@
             treeData.nodes.push({ 
                 id: newNodeId, 
                 label: newNodeLabel.replace(/ /g, '\n'), // Newline for better display
-                group: 'active' // Default group for new nodes
+                group: 'active', // Default group for new nodes
+                x: 0, // Explicitly set x coordinate to 0
+                y: 0  // Explicitly set y coordinate to 0
             });
 
             // Add edges for each selected parent
@@ -203,6 +205,7 @@
                 network.destroy(); // Destroy existing network
             }
             initNetwork(); // Re-initialize with updated data
+            network.fit({ animation: true }); // Fit the camera to show the new seed
 
             // Close the modal and clear input
             document.getElementById('addModal').classList.add('hidden');
