@@ -175,9 +175,10 @@
                 selectedParents.push(checkbox.value);
             });
 
+            // First validation: Check if any parent checkboxes are selected
             if (selectedParents.length === 0) {
-                alert("Please select at least one parent for your new seed.");
-                return;
+                alert("You must select at least one planetary connection");
+                return; // Abort the save
             }
 
             // Generate a unique ID for the new node
@@ -188,8 +189,8 @@
                 id: newNodeId, 
                 label: newNodeLabel.replace(/ /g, '\n'), // Newline for better display
                 group: 'active', // Default group for new nodes
-                x: 0, // Explicitly set x coordinate to 0
-                y: 0  // Explicitly set y coordinate to 0
+                x: Math.random() * 10, // Set initial x coordinate to a random slight offset
+                y: Math.random() * 10  // Set initial y coordinate to a random slight offset
             });
 
             // Add edges for each selected parent
